@@ -1,17 +1,4 @@
-export class GithubUser {
-    static search(userName) {
-        const endpoint = `https://api.github.com/users/${userName}`
-
-        return fetch(endpoint)
-        .then(data => data.json())
-        .then(({login, name, public_repos, followers}) => ({
-            login,
-            name,
-            public_repos,
-            followers
-        }))
-    }
-}
+import { GithubUser } from "./GithubUser.js"
 
 export class Favorites {
     constructor(root) {
@@ -40,6 +27,13 @@ export class Favorites {
      */
     async add(username) {
         try {
+
+            const userExists = this.entries.find(entry => entry.login === username)
+
+            if(userExists) {
+                throw new Error('Usuário já cadastrado')
+            }
+
             const user = await GithubUser.search(username)
 
             console.log(user)
@@ -115,6 +109,7 @@ export class FavoritesView extends Favorites {
 
             newRow.querySelector('.user img').src = `https://github.com/${user.login}.png`
             newRow.querySelector('.user img').alt = `Imagem de ${user.name}`
+            newRow.querySelector('.user a').href = `https://github.com/${user.login}`
             newRow.querySelector('.user p').textContent = user.name
             newRow.querySelector('.user span').textContent = user.login
             newRow.querySelector('.repositories ').textContent = user.publicRepos

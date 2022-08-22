@@ -26,6 +26,7 @@ body * {
     font-family: var(--font-family-primary);
 }
 
+/* Esse estilo serve para esconder a Label, mas ela continua visível para acessibilidade */
 .sr-only {
     position: absolute;
     width: 1px;
